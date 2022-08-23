@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import axios from "axios";
 import { Context } from "../App";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EditExerciseList = () => {
   //Hooks
   const context = useContext(Context);
-
+  let navigate = useNavigate();
   const exercise = useLocation();
   const { state } = exercise;
 
@@ -37,10 +37,12 @@ const EditExerciseList = () => {
 
     context.setAddExercise(exerciseToAdd);
 
-    axios.post(
-      `http://localhost:5000/exercises/update/${state._id}`,
-      exerciseToAdd
-    );
+    axios
+      .post(
+        `http://localhost:5000/exercises/update/${state._id}`,
+        exerciseToAdd
+      )
+      .then((res) => navigate("/exerciselist"));
   };
 
   //JSX

@@ -21,7 +21,7 @@ const CreateExercsises = () => {
   }, []);
 
   //Submit button function
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const exerciseToAdd = {
       username: ref.current.value,
@@ -32,9 +32,11 @@ const CreateExercsises = () => {
 
     context.setAddExercise(exerciseToAdd);
 
-    axios.post("http://localhost:5000/exercises/add", exerciseToAdd);
+     await axios
+       .post("http://localhost:5000/exercises/add", exerciseToAdd)
+       .then((res) => navigate("/exerciselist"));
 
-    navigate("/exerciselist");
+    ;
   };
 
   //JSX
