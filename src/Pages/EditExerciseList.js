@@ -1,31 +1,21 @@
-import axios from "axios";
-import React, { useContext, useEffect, useRef } from "react";
-import { Context } from "../App";
+import React,{ useContext} from 'react'
+import axios from 'axios';
+import { Context } from '../App';
+import { useLocation } from 'react-router-dom';
 
-const CreateExercsises = () => {
-  //Hooks
+const EditExerciseList = () => {
+   //Hooks
   const context = useContext(Context);
-  const ref = useRef();
-
-  useEffect(()=>{
-    const response = async () => {
-      await axios.get("http://localhost:5000/users").then((res) => {
-        console.log("Users loaded");
-        context.setAllUsers(res.data);
-      });
-    };
-    response();
-    // eslint-disable-next-line
-  },[])
-
   
+  const exercise = useLocation()
+  const {state} = exercise
   
 
   //Submit button function
   const onSubmit = (e) => {
     e.preventDefault();
     const exerciseToAdd = {
-      username: ref.current.value,
+      username: state.username,
       description: context.description,
       duration: context.duration,
       date: context.date,
@@ -33,7 +23,7 @@ const CreateExercsises = () => {
     console.log(exerciseToAdd);
     context.setAddExercise(exerciseToAdd);
 
-    axios.post("http://localhost:5000/exercises/add", exerciseToAdd);
+    axios.post(`http://localhost:5000/exercises/update/${state._id}`, exerciseToAdd);
   };
   console.log(context.allUsers)
   //JSX
@@ -41,14 +31,11 @@ const CreateExercsises = () => {
     <form className="ui form">
       <div className="field">
         <label>Name</label>
-        <select required ref={ref}>
-          {context.allUsers.map((user,index) => {
-            return (
-              <option key={user._id} value={user.username}>
-                {user.username}
-              </option>
-            );
-          })}
+        <select>
+          <option key={state._id} value={state.username}>
+            {state.username}
+          </option>
+          ; 
         </select>
       </div>
       <div className="field">
@@ -57,6 +44,7 @@ const CreateExercsises = () => {
           type="text"
           name="Description"
           placeholder="Description"
+          // value={state.description}
           onChange={(e) => context.setDescription(e.target.value)}
         />
       </div>
@@ -66,6 +54,7 @@ const CreateExercsises = () => {
           type="number"
           name="Duration"
           placeholder="Duration"
+          // value={state.duration}
           onChange={(e) => context.setDuration(e.target.value)}
         />
       </div>
@@ -75,6 +64,7 @@ const CreateExercsises = () => {
           type="date"
           name="date"
           placeholder="Date"
+          // value={state.date}
           onChange={(e) => context.setDate(e.target.value)}
         />
       </div>
@@ -86,8 +76,8 @@ const CreateExercsises = () => {
         disabled={
           !context.date ||
           !context.duration ||
-          !context.description ||
-          ref.current === undefined
+          !context.description 
+          
         }
         style={{ marginTop: "15px" }}
       >
@@ -97,4 +87,5 @@ const CreateExercsises = () => {
   );
 };
 
-export default CreateExercsises;
+
+export default EditExerciseList

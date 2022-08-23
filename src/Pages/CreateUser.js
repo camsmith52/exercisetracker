@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../App";
+import axios from "axios";
 
 const CreateUser = () => {
   //Hooks
@@ -8,7 +9,11 @@ const CreateUser = () => {
   //Submit button function
   const onSubmit = (e) => {
     e.preventDefault();
-    context.setAllUsers({ name: context.name });
+    axios.post("http://localhost:5000/users/add", { username: context.username }).then(res=>{
+      console.log('User added')
+      // context.setAllUsers([...context.allUsers, res.json]);
+    });
+    
   };
 
   //JSX
@@ -28,7 +33,7 @@ const CreateUser = () => {
         className="ui button blue"
         type="submit"
         onClick={(e) => onSubmit(e)}
-        disabled={!context.name}
+        disabled={!context.username}
       >
         Submit
       </button>

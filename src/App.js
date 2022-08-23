@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CreateExercsises from "./Pages/CreateExercsises";
 import CreateUser from "./Pages/CreateUser";
 import ExerciseList from "./Pages/ExerciseList";
-import Home from "./Pages/Home";
+import EditExerciseList from "./Pages/EditExerciseList";
+
 import NavBar from "./Components/NavBar";
 
 //Create context for global state
@@ -11,7 +12,7 @@ export const Context = React.createContext();
 
 //Initial state
 const initialState = {
-  name: "",
+  username: "",
   lastName: "",
   description: "",
   duration: "",
@@ -24,7 +25,7 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "SET_NAME":
-      return { ...state, name: action.value };
+      return { ...state, username: action.value };
     case "SET_DESCRIPTION":
       return { ...state, description: action.value };
     case "SET_DURATION":
@@ -32,11 +33,18 @@ const reducer = (state, action) => {
     case "SET_DATE":
       return { ...state, date: action.value };
     case "SET_ALLUSERS":
-      return { ...state, allUsers: [...state.allUsers, action.value] };
+      return { ...state, allUsers: action.value };
     case "SET_EXERCISELIST":
-      return { ...state, exerciseList: [...state.exerciseList, action.value] };
+      return { ...state, exerciseList: action.value };
+    case "SET_ADD_EXERCISE":
+      return { ...state, exerciseList: [...state.exerciseList,action.value] };
     case "SET_DELETEEXERCISE":
-      return { ...state, exerciseList: [...state.exerciseList.filter(ele=>ele.name!==action.value)] };
+      return {
+        ...state,
+        exerciseList: [
+          ...state.exerciseList.filter((ele) => ele._id !== action.value),
+        ],
+      };
     default:
       return state;
   }
@@ -48,7 +56,7 @@ function App() {
 
   //Global state
   const value = {
-    name: state.name,
+    username: state.username,
     description: state.description,
     allUsers: state.allUsers,
     duration: state.duration,
@@ -60,6 +68,7 @@ function App() {
     setDate: (value) =>dispatch({ type: "SET_DATE", value: value }),
     setAllUsers: (value) => dispatch({ type: "SET_ALLUSERS", value: value }),
     setExerciseList: (value) => dispatch({ type: "SET_EXERCISELIST", value: value }),
+    setAddExercise: (value) => dispatch({ type: "SET_ADD_EXERCISE", value: value }),
     setDeleteExercise: (value) => dispatch({ type: "SET_DELETEEXERCISE", value: value }),
   };
   //Routes with pages as elements
@@ -68,9 +77,10 @@ function App() {
       <NavBar />
       <Context.Provider value={value}>
         <Routes>
-          <Route path="/" exact element={<Home />}></Route>
+          <Route path="/" exact element={<ExerciseList />}></Route>
           <Route path="/createexercises" element={<CreateExercsises />}></Route>
           <Route path="/exerciselist" element={<ExerciseList />}></Route>
+          <Route path="/edit/:id" element={<EditExerciseList />}></Route>
           <Route path="/createuser" element={<CreateUser />}></Route>
         </Routes>
       </Context.Provider>
