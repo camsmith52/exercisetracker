@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../App";
 
 const CreateExercsises = () => {
   //Hooks
   const context = useContext(Context);
   const ref = useRef();
+  let navigate = useNavigate();
 
   useEffect(() => {
     const response = async () => {
@@ -27,12 +29,12 @@ const CreateExercsises = () => {
       duration: context.duration,
       date: context.date,
     };
-    console.log(exerciseToAdd);
+
     context.setAddExercise(exerciseToAdd);
 
     axios.post("http://localhost:5000/exercises/add", exerciseToAdd);
 
-    window.location = "/exerciselist";
+    navigate("/exerciselist");
   };
 
   //JSX
@@ -77,21 +79,22 @@ const CreateExercsises = () => {
           onChange={(e) => context.setDate(e.target.value)}
         />
       </div>
-
-      <button
-        className="ui button blue"
-        type="submit"
-        onClick={(e) => onSubmit(e)}
-        disabled={
-          !context.date ||
-          !context.duration ||
-          !context.description ||
-          ref.current === undefined
-        }
-        style={{ marginTop: "15px" }}
-      >
-        Submit
-      </button>
+      
+        <button
+          className="ui button blue"
+          type="submit"
+          onClick={(e) => onSubmit(e)}
+          disabled={
+            !context.date ||
+            !context.duration ||
+            !context.description ||
+            ref.current === undefined
+          }
+          style={{ marginTop: "15px" }}
+        >
+          Submit
+        </button>
+      
     </form>
   );
 };
