@@ -7,7 +7,7 @@ const CreateExercsises = () => {
   const context = useContext(Context);
   const ref = useRef();
 
-  useEffect(()=>{
+  useEffect(() => {
     const response = async () => {
       await axios.get("http://localhost:5000/users").then((res) => {
         console.log("Users loaded");
@@ -16,10 +16,7 @@ const CreateExercsises = () => {
     };
     response();
     // eslint-disable-next-line
-  },[])
-
-  
-  
+  }, []);
 
   //Submit button function
   const onSubmit = (e) => {
@@ -34,15 +31,17 @@ const CreateExercsises = () => {
     context.setAddExercise(exerciseToAdd);
 
     axios.post("http://localhost:5000/exercises/add", exerciseToAdd);
+
+    window.location = "/exerciselist";
   };
-  console.log(context.allUsers)
+
   //JSX
   return (
     <form className="ui form">
       <div className="field">
         <label>Name</label>
         <select required ref={ref}>
-          {context.allUsers.map((user,index) => {
+          {context.allUsers.map((user, index) => {
             return (
               <option key={user._id} value={user.username}>
                 {user.username}
@@ -56,7 +55,7 @@ const CreateExercsises = () => {
         <input
           type="text"
           name="Description"
-          placeholder="Description"
+          placeholder="What exercise did you do?"
           onChange={(e) => context.setDescription(e.target.value)}
         />
       </div>
@@ -65,7 +64,7 @@ const CreateExercsises = () => {
         <input
           type="number"
           name="Duration"
-          placeholder="Duration"
+          placeholder="How many minutes?"
           onChange={(e) => context.setDuration(e.target.value)}
         />
       </div>

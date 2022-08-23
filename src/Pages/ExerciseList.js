@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Context } from "../App";
 import axios from "axios";
-import moment from "moment";
 
 const ExerciseList = () => {
   //Hooks
@@ -46,18 +45,16 @@ const ExerciseList = () => {
               <td data-label="Name">{exercise.username}</td>
               <td data-label="Description">{exercise.description}</td>
               <td data-label="Duration">{exercise.duration}</td>
-              <td data-label="Date">
-                {moment`${exercise.date}`.utc().format("dddd")}
-              </td>
+              <td data-label="Date">{exercise.date.slice(0, 10)}</td>
               <td data-label="Edit/Delete">
                 <NavLink
-                key={exercise._id}
-                  to= {`/edit/${exercise._id}`}
-                  state= {exercise}
+                  key={exercise._id}
+                  to={`/edit/${exercise._id}`}
+                  state={exercise}
                 >
                   Edit
                 </NavLink>{" "}
-                |<button onClick={() => onDelete(exercise._id)}>delete</button>
+                | <button onClick={() => onDelete(exercise._id)}>delete</button>
               </td>
             </tr>
           );

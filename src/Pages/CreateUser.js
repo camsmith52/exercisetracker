@@ -1,19 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../App";
 import axios from "axios";
 
 const CreateUser = () => {
+  //State
+  const [userCreated, setUserCreated] = useState(false);
+
   //Hooks
   const context = useContext(Context);
 
   //Submit button function
   const onSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/users/add", { username: context.username }).then(res=>{
-      console.log('User added')
-      // context.setAllUsers([...context.allUsers, res.json]);
-    });
-    
+
+    axios
+      .post("http://localhost:5000/users/add", { username: context.username })
+      .then((res) => {
+        console.log("User added");
+      });
+    setUserCreated(true);
   };
 
   //JSX
@@ -37,6 +42,11 @@ const CreateUser = () => {
       >
         Submit
       </button>
+      {userCreated ? (
+        <p>User created! Create an exercise to get started.</p>
+      ) : (
+        ""
+      )}
     </form>
   );
 };
